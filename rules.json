@@ -1,0 +1,22 @@
+{
+  "localhost": {
+    "important_methods": ["POST", "PUT", "DELETE", "PATCH"],
+    "important_paths": [""],
+    "very_important_methods": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    "very_important_paths": [
+        "login",
+        "log-in",
+        "signin",
+        "sign-in",
+        "signup",
+        "sign-up",
+        "admin",
+        "env",
+        "dashboard", 
+        "user",
+        "home",
+        "homepage",
+        "index"
+    ]
+  }
+}

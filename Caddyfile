@@ -1,0 +1,86 @@
+{
+	servers {
+		log_credentials
+	}
+}
+
+(redirect_http) {
+	http://{args[0]} {
+		log {
+			output discard
+		}
+
+		header -Server
+		redir https://{host}{uri}
+	}
+}
+
+(logging) {
+	@static path_regexp \.(js|css|png|jpe?g|gif|ico|woff|otf|ttf|eot|svg|txt|pdf|docx?|xlsx?)$
+	log_skip @static
+
+	# 1. Define a matcher for "Safe" bodies (e.g., less than 100KB)
+	@loggable_req_body {
+		# 1. Performance: Only look at methods that usually have bodies
+		method POST PUT PATCH
+
+		# 2. Content-Type Check (The Allow List)
+		# Only allows JSON, XML, standard Forms, or plain text.
+		# This automatically EXCLUDES 'multipart/form-data' (file uploads) and binary files.
+		header_regexp Content-Type ^(application/json|application/xml|text/|application/x-www-form-urlencoded)
+
+		# 3. Safety: Check that Content-Length is NOT empty ("") 
+		#    AND that it is less than 10KB (10240 bytes)
+		expression {header.Content-Length} != "" && int({header.Content-Length}) <102400
+	}
+
+	# 2. Only capture the body if it matches the size limit
+	handle @loggable_req_body {
+		vars {
+			# Only now do we read the body into memory
+			captured_body {http.request.body}
+		}
+	}
+
+	log_append request_body {vars.captured_body}
+
+	log {
+		output net {args[0]}
+		format json
+	}
+}
+
+(stealth_proxy) {
+	import redirect_http {args[0]} 
+
+	{args[0]}:{args[1]} {
+		import logging {args[3]}
+
+		# Global header cleanup
+		header -Alt-Svc
+		header -Via
+		reverse_proxy {args[2]} {
+			#Clean up Request Headers (Sent to the Backend)
+			# This prevents the backend from knowing it is behind a proxy
+			header_up -Via
+			header_up -X-Forwarded-For
+			header_up -X-Forwarded-Host
+			header_up -X-Forwarded-Proto
+
+			# Set the Host header so the backend knows which site you want
+			# header_up Host {upstream_hostport}
+
+			# header_up Connection "keep-alive"
+
+			# transport http {
+			#     # Tell Caddy to expect a certificate for "site1.example.com"
+			#     # This allows the IP connection to verify successfully
+			#     tls_server_name {args[0]}
+			#     tls_insecure_skip_verify
+			# }
+		}
+	}
+}
+
+# arguments: domain, listen_port, upstream_url, logging_destination
+import stealth_proxy localhost 443 http://localhost:8000 localhost:9000
