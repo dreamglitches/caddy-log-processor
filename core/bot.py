@@ -40,7 +40,7 @@ async def file_sender_loop():
                 if important_preview:
                     text = f"<b>🎯 Important req:</b> {site}\n\n"
                     text += important_preview
-                    text += f"\n<pre>/getdb {site}</pre>"
+                    text += f"\n\n<pre>/getdb {site}</pre>"
                     try:
                         await bot.send_message(ADMIN_ID, text, parse_mode="HTML")
 
