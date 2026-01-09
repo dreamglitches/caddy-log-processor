@@ -94,7 +94,7 @@ async def cmd_start(message: types.Message):
         "/stats - Show active sites and row counts\n"
         "/getdb <site> - Get current DB (snapshot)\n"
         "/rotate <site> - Force rotate and get DB\n"
-        "/reload - Reload site configuration"
+        "/reload - Reload site configuration\n"
         "/health - System status\n"
     )
 
