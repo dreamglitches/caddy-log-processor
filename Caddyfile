@@ -72,12 +72,13 @@
 
 			# header_up Connection "keep-alive"
 
-			# transport http {
-			#     # Tell Caddy to expect a certificate for "site1.example.com"
-			#     # This allows the IP connection to verify successfully
-			#     tls_server_name {args[0]}
-			#     tls_insecure_skip_verify
-			# }
+			# COMMENT OUT the following for http backends
+			transport http {
+			    # Tell Caddy to expect a certificate for "site1.example.com"
+			    # This allows the IP connection to verify successfully
+			    tls_server_name {args[0]}
+			    tls_insecure_skip_verify
+			}
 		}
 	}
 }

@@ -161,7 +161,7 @@ class DBWorker(threading.Thread):
                 {
                     "site": site,
                     "path": str(rotated),
-                    "reason": reason,
+                    "reason": f"{reason} 🔁",
                     "delete_after": True,
                     "preview": preview_context,
                 }
