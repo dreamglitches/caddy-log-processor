@@ -1,15 +1,7 @@
 {
   "localhost": {
-    "important_methods": ["POST", "PUT", "DELETE", "PATCH"],
-    "important_paths": [""],
-    "very_important_methods": ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "very_important_paths": [
-        "login",
-        "log-in",
-        "signin",
-        "sign-in",
-        "signup",
-        "sign-up",
+    "important_methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    "important_paths": [
         "admin",
         "env",
         "dashboard", 
@@ -17,6 +9,15 @@
         "home",
         "homepage",
         "index"
+      ],
+    "very_important_methods": ["POST", "PUT", "PATCH", "DELETE"],
+    "very_important_paths": [
+        "login",
+        "log-in",
+        "signin",
+        "sign-in",
+        "signup",
+        "sign-up"
     ]
   }
 }
